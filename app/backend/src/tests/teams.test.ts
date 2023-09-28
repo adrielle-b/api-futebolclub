@@ -25,4 +25,22 @@ describe('Teams', function() {
     expect(status).to.equal(200);
     expect(body).to.deep.equal(teams);
   });
+
+  it('O endpoint GET /teams/:id deve retornar o time com o id informado', async function () {
+    const id = 1;
+    sinon.stub(SequelizeTeams, 'findByPk').resolves(SequelizeTeams.build(teams[0]));
+
+    const { status, body} = await chai.request(app).get(`/teams/${id}`);
+    expect(status).to.equal(200);
+    expect(body).to.deep.equal(teams[0]);
+  });
+
+  it('O endpoint GET /teams/:id deve retornar 404 se o time não existir', async function () {
+    const id = 1;
+    sinon.stub(SequelizeTeams, 'findByPk').resolves(null);
+
+    const { status, body} = await chai.request(app).get(`/teams/${id}`);
+    expect(status).to.equal(404);
+    expect(body).to.deep.equal({ message: 'Time não encontrado' });
+  });
 });

@@ -11,4 +11,10 @@ export default class TeamsController {
     const { status, data } = await this.teamsService.getAllTeams();
     res.status(mapStatusHTTP(status)).json(data);
   }
+
+  async getTeamById(req: Request, res: Response) {
+    const { id } = req.params;
+    const { status, data } = await this.teamsService.getTeamById(Number(id));
+    res.status(mapStatusHTTP(status)).json(data);
+  }
 }
