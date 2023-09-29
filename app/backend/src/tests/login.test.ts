@@ -9,7 +9,7 @@ import Example from '../database/models/ExampleModel';
 import { Response } from 'superagent';
 
 import SequelizeUsers from '../database/models/SequelizeUsers';
-import { jwtPayload, loginInexistente, loginInvalidoEmail, loginInvalidoSenha } from './mocks/login.mock';
+import { jwtPayload, loginInexistente, loginInvalidoEmail, loginInvalidoSenha, loginValido, user } from './mocks/login.mock';
 import JWT from '../utils/jwt';
 
 chai.use(chaiHttp);
@@ -18,6 +18,15 @@ const { expect } = chai;
 
 describe('Login', function() {
     afterEach(sinon.restore);
+
+    it('O endpoint POST /login deve retornar 200 e um token se o usuário existir', async function () {
+        sinon.stub(SequelizeUsers, 'findOne').resolves(SequelizeUsers.build(user));
+        sinon.stub(JWT, 'sign').returns('token');
+        const { status, body } = await chai.request(app).post('/login').send(loginValido);
+    
+        expect(status).to.equal(200);
+        expect(body).to.have.property('token');
+    });
 
     it('O endpoint POST /login deve retornar 401 se o usuário não existir', async function () {
         sinon.stub(SequelizeUsers, 'findOne').resolves(null);
