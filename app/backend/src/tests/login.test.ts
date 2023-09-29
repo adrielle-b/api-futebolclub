@@ -9,7 +9,7 @@ import Example from '../database/models/ExampleModel';
 import { Response } from 'superagent';
 
 import SequelizeUsers from '../database/models/SequelizeUsers';
-import { jwtPayload, loginInexistente, loginInvalidoEmail, loginInvalidoSenha, loginValido, user } from './mocks/login.mock';
+import { jwtPayload, loginInexistente, loginInvalidoEmail, loginInvalidoSenha } from './mocks/login.mock';
 import JWT from '../utils/jwt';
 
 chai.use(chaiHttp);
