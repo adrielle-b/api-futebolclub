@@ -18,4 +18,20 @@ export default class MatchesController {
     const { status, data } = await this.matchesService.getAllMatches(String(inProgress));
     return res.status(mapStatusHTTP(status)).json(data);
   }
+
+  async finishMatch(req: Request, res: Response) {
+    const { id } = req.params;
+
+    const { status, data } = await this.matchesService.finishMatch(Number(id));
+    return res.status(mapStatusHTTP(status)).json(data);
+  }
+
+  async updatedMatch(req: Request, res: Response) {
+    const { id } = req.params;
+    const { homeTeamGoals, awayTeamGoals } = req.body;
+
+    const { status, data } = await this.matchesService
+      .updatedMatch(Number(id), Number(homeTeamGoals), Number(awayTeamGoals));
+    return res.status(mapStatusHTTP(status)).json(data);
+  }
 }

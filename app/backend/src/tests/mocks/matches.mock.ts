@@ -55,9 +55,15 @@ const matchesInProgressFalse = [
     }
  ];
 
+ const matchUpdateGoals = {
+  "homeTeamGoals": 3,
+  "awayTeamGoals": 1
+}
+
 
 export {
     macthesAll,
     matchesInProgressTrue,
     matchesInProgressFalse,
+    matchUpdateGoals,
 }
