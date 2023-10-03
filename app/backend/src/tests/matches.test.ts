@@ -8,11 +8,11 @@ import Example from '../database/models/ExampleModel';
 
 import { Response } from 'superagent';
 
-import SequelizeUsers from '../database/models/SequelizeUsers';
 import SequelizeMatches from '../database/models/SequelizeMatches';
-import { macthesAll, matchUpdateGoals, matchesInProgressFalse, matchesInProgressTrue } from './mocks/matches.mock';
+import { macthesAll, matchCreate, matchCreateInvalido, matchCreated, matchUpdateGoals, matchesInProgressFalse, matchesInProgressTrue } from './mocks/matches.mock';
 import JWT from '../utils/jwt';
 import { jwtPayload } from './mocks/login.mock';
+import SequelizeTeams from '../database/models/SequelizeTeams';
 
 chai.use(chaiHttp);
 
@@ -87,4 +87,33 @@ describe('Matches', function() {
       expect(status).to.equal(404);
       expect(body).to.deep.equal({ message: 'Partida não encontrada' });
     });
+
+    it('O endpoint POST /matches retorna 201 e a partida criada', async function() {
+      sinon.stub(JWT, 'verify').resolves(jwtPayload);
+      sinon.stub(SequelizeMatches, 'create').resolves(SequelizeMatches.build(matchCreated));
+
+      const { status, body } = await chai.request(app).post('/matches').set('Authorization', 'tokenValido').send(matchCreate);
+
+      expect(status).to.equal(201);
+      expect(body).to.deep.equal(matchCreated);
+    });
+
+    it('O endpoint POST /matches retorna 422 e uma mensagem de erro se os times forem iguais', async function() {
+      sinon.stub(JWT, 'verify').resolves(jwtPayload);
+
+      const { status, body } = await chai.request(app).post('/matches').set('Authorization', 'tokenValido').send(matchCreateInvalido);
+
+      expect(status).to.equal(422);
+      expect(body).to.deep.equal({ message: 'It is not possible to create a match with two equal teams' });
+    });
+
+    it('O endpoint POST /matches retorna 404 e uma mensagem de erro se não encontrar os times', async function() {
+      sinon.stub(JWT, 'verify').resolves(jwtPayload);
+      sinon.stub(SequelizeTeams, 'findByPk').resolves(null);
+
+      const { status, body } = await chai.request(app).post('/matches').set('Authorization', 'tokenValido').send(matchCreate);
+
+      expect(status).to.equal(404);
+      expect(body).to.deep.equal({ message: 'There is no team with such id!' });
+    })
 });

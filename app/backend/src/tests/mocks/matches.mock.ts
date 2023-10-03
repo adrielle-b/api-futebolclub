@@ -56,14 +56,39 @@ const matchesInProgressFalse = [
  ];
 
  const matchUpdateGoals = {
-  "homeTeamGoals": 3,
-  "awayTeamGoals": 1
+  homeTeamGoals: 3,
+  awayTeamGoals: 1
 }
 
+const matchCreate = {
+    homeTeamId: 1,
+    awayTeamId: 2,
+    homeTeamGoals: 2,
+    awayTeamGoals: 2
+}
+
+const matchCreateInvalido = {
+  homeTeamId: 2,
+  awayTeamId: 2,
+  homeTeamGoals: 2,
+  awayTeamGoals: 2
+}
+
+const matchCreated = {
+    id: 49,
+    homeTeamId: 1,
+    awayTeamId: 2,
+    homeTeamGoals: 2,
+    awayTeamGoals: 2,
+    inProgress: true
+}
 
 export {
     macthesAll,
     matchesInProgressTrue,
     matchesInProgressFalse,
     matchUpdateGoals,
+    matchCreate,
+    matchCreated,
+    matchCreateInvalido
 }
